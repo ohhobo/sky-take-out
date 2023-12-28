@@ -1,5 +1,8 @@
 package com.sky.context;
 
+/**
+ * 线程局部变量获得当前员工id
+ */
 public class BaseContext {
 
     public static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
