@@ -60,6 +60,30 @@ public class DishController {
         return Result.success();
     }
 
+    /**
+     * 根据Id查询菜品
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据Id查询菜品")
+    public Result getById(@PathVariable Long id){
+        DishVO dishVO = dishService.getByIdWithFlavor(id);
+        return Result.success(dishVO);
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改菜品")
+    public Result update(@RequestBody DishDTO dishDTO){
+        dishService.updateDishWithFlavor(dishDTO);
+        return Result.success();
+    }
+
 
 
 }
