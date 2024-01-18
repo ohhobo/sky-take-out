@@ -6,3 +6,9 @@ sky:
     database: sky_take_out
     username: root
     password: cyr010523
+
+  alioss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    access-key-id: LTAI5tSYFoxfFchwXUSxV8st
+    access-key-secret: 3g4kdvcKkaCCokNJBxYZXCM3UFB9Wc
+    bucket-name: cangqiong-hobo
