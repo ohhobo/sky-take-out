@@ -19,3 +19,8 @@ sky:
     password: cyr010523
     database: 10
     #database一共有16个数据库，0-15编号
+
+  wechat:
+    appid: wx3b937cd561c1edef
+    secret: 3e476eafcdef807539bd3a1f3bd5846e
+
