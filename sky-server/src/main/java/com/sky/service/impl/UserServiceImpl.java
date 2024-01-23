@@ -42,14 +42,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User wxLogin(UserLoginDTO userLoginDTO) {
-        String openId = getOpenId(userLoginDTO.getCode());
-        if(openId==null){
+        String openid = getOpenId(userLoginDTO.getCode());
+        if(openid==null){
             throw new LoginFailedException(MessageConstant.LOGIN_FAILED);
         }
-        User user = userMapper.getByOpenId(openId);
+        User user = userMapper.getByOpenId(openid);
         if(user == null){
             user = User.builder()
-                    .openid(openId)
+                    .openid(openid)
                     .createTime(LocalDateTime.now())
                     .build();
             userMapper.insert(user);
@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
         map.put("grant_type","authorization_code");
         String json = HttpClientUtil.doGet(WX_LOGIN,map);
         JSONObject jsonObject = JSON.parseObject(json);
-        String openId = jsonObject.getString("openId");
-        return openId;
+        String openid = jsonObject.getString("openid");
+        return openid;
 
     }
 }
