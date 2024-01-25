@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/user/shoppingCart")
 @Api(tags = "用户端购物车接口")
-public class shoppingCartController {
+public class ShoppingCartController {
     @Autowired
     private ShoppingCartService shoppingCartService;
 
@@ -49,6 +49,19 @@ public class shoppingCartController {
     @ApiOperation("清空购物车")
     public Result<String> clean(){
         shoppingCartService.cleanShoppingCart();
+        return Result.success();
+    }
+
+    /**
+     * 删除购物车中一个商品
+     * @param shoppingCartDTO
+     * @return
+     */
+    @PostMapping("/sub")
+    @ApiOperation("删除购物车中一个商品")
+    public Result sub(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("删除购物车中一个商品，商品：{}", shoppingCartDTO);
+        shoppingCartService.subShoppingCart(shoppingCartDTO);
         return Result.success();
     }
 
