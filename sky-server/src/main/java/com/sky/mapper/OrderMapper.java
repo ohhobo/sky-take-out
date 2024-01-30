@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.Orders;
@@ -69,4 +70,17 @@ public interface OrderMapper {
     List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime orderTime);
 
     Double getTurnOver(Map map);
+
+    /**
+     *根据动态条件统计订单数量
+     * @param map
+     */
+    Integer countByMap(Map map);
+
+    /**
+     * 查询商品销量排名
+     * @param begin
+     * @param end
+     */
+    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
 }
