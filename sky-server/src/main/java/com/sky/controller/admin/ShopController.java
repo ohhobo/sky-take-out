@@ -51,12 +51,12 @@ public class ShopController {
     @GetMapping("/status")
     @ApiOperation("获得营业状态")
     public Result<Integer> getStatus(){
-        if (!redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY, StatusConstant.ENABLE) &&
-                !redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY, StatusConstant.DISABLE)){
-            System.out.println("都不存在");
-            redisTemplate.opsForValue().set(KEY,StatusConstant.DISABLE);
-        }
         Integer status = redisTemplate.opsForValue().get(KEY);
+        redisBloomFilter.addByBloomFilter(bloomFilterHelper,KEY,status);
+        if(!redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY, StatusConstant.ENABLE)&&
+                !redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY,StatusConstant.DISABLE)){
+            return Result.error();
+        }
         return Result.success(status);
     }
 }

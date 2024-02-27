@@ -1,5 +1,8 @@
 package com.sky.controller.user;
 
+import com.sky.bloom.BloomFilterHelper;
+import com.sky.bloom.RedisBloomFilter;
+import com.sky.constant.StatusConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +28,10 @@ public class ShopController {
     public static final String KEY = "SHOP_STATUS";
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RedisBloomFilter redisBloomFilter;
+    @Autowired
+    private BloomFilterHelper<Integer> bloomFilterHelper;
     /**
      * 获得营业状态
      * @return
@@ -32,6 +39,10 @@ public class ShopController {
     @GetMapping("/status")
     @ApiOperation("获得营业状态")
     public Result<Integer> getStatus(){
+        if(!redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY, StatusConstant.ENABLE)&&
+                !redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY,StatusConstant.DISABLE)){
+            return Result.error();
+        }
         Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
         return Result.success(status);
     }

@@ -41,7 +41,7 @@ public class RedisConfiguration {
 //        return new BloomFilterHelper<>(
 //                (Funnel<String>) (from, into) -> into.putString(from,Charsets.UTF_8)
 //                        .putString(from, Charsets.UTF_8), 1000000, 0.01);
-        return new BloomFilterHelper<>(Funnels.integerFunnel(),1000000,0.01);
+        return new BloomFilterHelper<>(Funnels.integerFunnel(),100000,0.01);
     }
 
 }
