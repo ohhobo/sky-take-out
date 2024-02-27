@@ -1,5 +1,8 @@
 package com.sky.controller.admin;
 
+import com.sky.bloom.BloomFilterHelper;
+import com.sky.bloom.RedisBloomFilter;
+import com.sky.constant.StatusConstant;
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +25,11 @@ import org.springframework.web.bind.annotation.*;
 public class ShopController {
     public static final String KEY = "SHOP_STATUS";
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Integer> redisTemplate;
+    @Autowired
+    private RedisBloomFilter redisBloomFilter;
+    @Autowired
+    private BloomFilterHelper<Integer> bloomFilterHelper;
 
     /**
      * 设置营业状态
@@ -32,6 +39,7 @@ public class ShopController {
     @PutMapping("/{status}")
     @ApiOperation("设置营业状态")
     public Result setStatus(@PathVariable Integer status){
+        redisBloomFilter.addByBloomFilter(bloomFilterHelper,KEY,status);
         redisTemplate.opsForValue().set(KEY,status);
         return Result.success();
     }
@@ -43,8 +51,12 @@ public class ShopController {
     @GetMapping("/status")
     @ApiOperation("获得营业状态")
     public Result<Integer> getStatus(){
-        Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
+        if (!redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY, StatusConstant.ENABLE) &&
+                !redisBloomFilter.includeByBloomFilter(bloomFilterHelper,KEY, StatusConstant.DISABLE)){
+            System.out.println("都不存在");
+            redisTemplate.opsForValue().set(KEY,StatusConstant.DISABLE);
+        }
+        Integer status = redisTemplate.opsForValue().get(KEY);
         return Result.success(status);
     }
-
 }
